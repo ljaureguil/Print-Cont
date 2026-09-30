@@ -1,0 +1,471 @@
+<html>
+<link rel="icon" href="https://freepngimg.com/save/14495-orange-png-clipart/744x744">
+<title>Cont Priv</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+</head>
+<style>
+    body {
+        background-color: white;
+    }
+
+    button {
+        margin: 15px;
+
+    }
+
+    input {
+
+        border-top: none;
+        border-left: none;
+        border-right: none;
+
+        field-sizing: content;
+        min-width: 150px;
+        /* Prevents the input from disappearing when empty */
+        max-width: 100%;
+        /* Keeps it from breaking outside its container */
+    }
+
+    #final {
+        display: none;
+    }
+</style>
+
+
+<div id="controles">
+    <button onclick="printPdf()">Print/Pdf</button>
+    <button onclick="clearFs()">Clear Firmas</button>
+    <button onclick="sendc()">Enviar</button>
+    <select id="selopc" oninput="doopcs(this.value)">
+        <option>Select an option</option>
+        <option>Obtener my contrato</option>
+        <option>Enviar Contrato</option>
+        <option>Clear Contenido</option>
+        <option>guardar contrato</option>
+    </select>
+
+</div>
+
+<div id="final">
+
+
+</div>
+
+
+
+<script>
+    link = "https://api.jsonblob.com/01a0e08d-3c62-7f19-b76d-f8e8fd28c363";// "https://api.jsonblob/01a0e08d-3c62-7f19-b76d-f8e8fd28c363/json"
+    var GetJson, UpdateJson, obj, sobj, actualob, obfe
+    loadDoc('https://raw.githubusercontent.com/ljaureguil/My-Library/refs/heads/master/MyLibmin.js', function (r) {
+
+        var sc = document.createElement("script");
+        sc.innerHTML = r;
+        document.head.appendChild(sc)
+
+        inic()
+
+    })
+
+    var p1 = `
+
+Contrato del Grupo Comando Único.
+
+A quien corresponda:
+Por medio de este presente hago constar que el Grupo Comando Único amenizara en el evento de:
+`;
+    var p2 = `
+Fecha del Evento:<input id="fe" type="date"  class="cinputs"></input>
+Nombre: <input id="no" class="cinputs"></input>
+
+Precio por Hora<input id="pr" type="number"  class="cinputs"></input>
+Horas:<input id="ho" type="number"  class="cinputs" ></input>
+Hora de Inicio:<input id="hi" type="number"  class="cinputs" oninput="ht.value=this.value*1+ho.value*1"></input>
+Hora de Término:<input id="ht" type="number"  class="cinputs"></input>
+Domicilio del evento:<input id="di" type="text"  class="cinputs"></input>
+Numero tel/cell:<input id="te" type="tel"  class="cinputs"></input>
+Deposito:<input id="de" type="number"  class="cinputs" oninput=""></input>
+Restando:<input id="re" type="number"  class="cinputs"></input>
+Total:<input id="to" type="number"  class="cinputs"></input>
+Nota:<input id="not" type="text"  class="cinputs"></input>
+`
+
+    var p3 = `
+La persona se compromete a pagar la cantidad restante el día de la ceremonia que se celebrará. una vez terminada la primera hora, se deberá liquidar la cantidad restante, a base de dinero en efectivo; no se aceptarán cheques. Si en el dia del evento se pide mas tiempo despues de las marcadas en el contrato se cobraran al precio actual que el grupo tenga.
+En dado caso que el evento sea suspendido por riña o por paro de las leyes locales la cantidad restante se tiene que liquidar.
+
+Si por alguna razón entre la hora de inicio y término hubiera alguna interrupción por parte del cliente o debido a la programación del evento el grupo no sera responsable, el compromiso terminará a la hora acordada.
+
+se deberá tener un espacio predeterminado para la instalación del Grupo, ya sea en stage o lugar del evento. En dado caso de alguna otra instalación de sonido, ya sea Dj u otro tipo de agrupación, se pide de favor; dejar un espacio para el grupo.
+
+Además de que se tendrá que reservar un debido espacio en estacionamiento o entrada, para descargar el equipo, y cargar dicho equipo cuando el evento haya concluido; preferiblemente lo más cercano posible al escenario.
+
+En dado caso de un clima imprevisto, ya sea lluvia, granizo, etc. El evento tendrá que llevarse a cabo, en caso de cancelación de dicho evento, el cliente perderá su depósito por motivo de incumplimiento.
+
+Debe tomarse en cuenta que si por alguna razón la energía eléctrica no es suficiente o llegara a haber un corto o fallas; el evento tendría que llevarse a cabo aun sin energía. se tendrá que notificar al responsable del grupo con un mínimo de 15 días antes. El lugar del evento debe disponer con la suficiente energía para la conexión de aparatos auditivos, como bocinas, micrófonos, etc.
+
+Grupo Comando Único se compromete con todos sus clientes a ofrecer el mejor servicio que se merece, para que pase un momento agradable en su celebración.
+
+Firma del cliente: 
+`
+
+    var contPriv = p1 + p2 + p3;
+
+    function inic2() {
+
+        var cl, pin;
+        GetJson(link, function (ob) {
+
+            obj = ob;
+            sobj = JSON.stringify(ob)
+            cl = prompt("Escribe tu clave (esta en tu mensaje de texto)");
+            pin = prompt("Escribe tu pin") * 1;
+            var s = ""
+
+            for (var ii = 0; ii < cl.length; ii++) {
+                s += String.fromCharCode(cl.charCodeAt(ii) + pin)
+
+            }
+
+            var cls = obj.cls;
+            var an = -1, i = 0;
+
+            for (i = 0; i < cls.length; i++) {
+                var c = cls[i][0];
+
+                if (c === s) {
+                    final.style.display = "block";
+                    actualob = cls[i];
+                    //aqui
+                    var sc = decodif(actualob[1])
+
+                    obfe = JSON.parse(sc);
+
+                    getPriv();
+                    ht.disabled = true;
+                    de.disabled = true;
+                    re.disabled = true;
+                    to.disabled = true;
+                    fe.disabled = true;
+
+                    i = cls.length
+
+                }
+
+
+            }
+            if (i === cls.length) {
+                alert("Clave o pin no se encuentran, trata de nuevo")
+                window.location.reload();
+            }
+        })
+
+    }
+
+
+    function inic() {
+
+        var cl, pin;
+        cl = prompt("Escribe tu clave (esta en tu mensaje de texto)");
+        pin = prompt("Escribe tu pin") * 1;
+        var s = ""
+
+        for (var ii = 0; ii < cl.length; ii++) {
+            s += String.fromCharCode(cl.charCodeAt(ii) + pin)
+
+        }
+        GetJson(link, function (ob) {
+
+            obj = ob;
+            sobj = JSON.stringify(ob)
+
+            var ot = verifycl(s);
+            if (ot.ob) {
+
+                final.style.display = "block";
+                actualob = ot.ob;
+
+                if (actualob[1] === "") {
+                    obfe = { fe: "", no: "", te: "", pr: "", di: "", ho: "", hi: "", de: "", "not": "" };
+
+                }
+                else {
+                    var sc = decodif(actualob[1])
+                    //    alert(sc+"antes de parsear")
+                    obfe = JSON.parse(sc);
+                }
+                getPriv();
+                fe.disabled = true;
+                ht.disabled = true;
+                de.disabled = true;
+                re.disabled = true;
+                firg.disabled = true;
+                to.disabled = true;
+
+            }
+            else {
+                alert("Clave o pin no se encuentran, trata de nuevo")
+                //  window.location.reload();
+            }
+        })
+
+    }
+
+
+
+    function doopcs(v) {
+        if (v === "Obtener my contrato") {
+            //  window.location.reload();
+            inic();
+        }
+
+        selopc.value = "Select an option"
+
+    }
+
+
+    function printPdf() {
+        printDoc("editor.value", function () { alert("done") })
+        //   editor.style.display = "block"
+
+    }
+
+    function loadDoc(url, callback) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("GET", url, false);
+        xhttp.send();
+        callback(xhttp.responseText);
+
+    }
+
+
+    var cwidth = 550;
+
+    function getPriv() {
+        loadDoc("https://raw.githubusercontent.com/ljaureguil/Print/refs/heads/main/cpriv", function (r) {
+            //   editor.value = r
+            // var tx = r.split(`Firma del cliente:`)[0]
+
+            //  tx = tx.replace(/\n/g, "<br>");
+            var tx = contPriv.replace(/\n/g, "<br>");
+            //      tx.replace(//g,"")
+
+
+            final.innerHTML = '<title>Contrato Comando Unico</title><p style="width:100%;height:100%;border:none;padding:0px;font-size:14px">' + tx //height:auto;
+
+                + ' Firma del Cliente: <canvas id="firc" style=";width:40%;height:50px;border-bottom: 2px solid #000000;background:rgba(0,0,0,.02);"></canvas> . . . Date: <input type="date"><br> <br>'
+                + ' <br>Firma del Grupo: <canvas id="firg" style="width:40%;height:50px;border-bottom: 2px solid #000000;background:rgba(0,0,0,.02);"></canvas> . . . Date: <input type="date"><br> <br><br>'
+                // eval(scc)
+                + '</p>'
+            ////////////////////////////////////
+            var o = {};
+            fe.value = obfe.fe;
+            no.value = obfe.no;
+            te.value = obfe.te;
+            pr.value = obfe.pr;
+            di.value = obfe.di;
+            ho.value = obfe.ho;
+            hi.value = obfe.hi;
+            de.value = obfe.de;
+            not.value = obfe.not;
+            //  o.fi = firc.toDataURL('image/png');
+            var dataurl = obfe.fi;
+            const img = new Image();
+            img.onload = function () {
+                // FIX: Pass rect.width and rect.height to constraint proportions into the layout area
+                firc.getContext("2d").drawImage(img, 0, 0, firc.width, firc.height);
+            };
+            img.src = dataurl;
+            /*     */
+            var dataurl = obfe.fg;
+            const img2 = new Image();
+            img2.onload = function () {
+                // FIX: Pass rect.width and rect.height to constraint proportions into the layout area
+                firg.getContext("2d").drawImage(img2, 0, 0, firg.width, firg.height);
+                firg.disabled = true;
+            };
+            img2.src = dataurl;
+
+
+            ////////////////////////////////////
+
+
+
+            setgr(firc);
+            // setgr(firg)
+
+            //  childWindow.print();
+            firg.disabled = true;
+
+
+
+        });
+
+
+    }
+    function printDoc() {
+        controles.style.display = "none"
+        window.print();
+        controles.style.display = "block"
+
+    }
+
+    function clearFs() {
+
+
+        var ctx = firc.getContext('2d');
+        ctx.clearRect(0, 0, firc.width, firc.height);
+
+        ctx = firg.getContext('2d');
+        ctx.clearRect(0, 0, firg.width, firg.height);
+    }
+
+    function setgr(canvas) {
+
+
+        //  canvas; // = document.getElementById('firc');
+        const ctx = canvas.getContext('2d');
+        // const clearBtn = document.getElementById('sig-clear');
+        //  const saveBtn = document.getElementById('sig-save');
+
+        let isDrawing = false;
+
+        // Fixes blurry lines on retina displays & handles fluid resizing
+        function setupCanvas() {
+            const rect = canvas.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+
+            // Line style settings
+            ctx.strokeStyle = '#000099';
+            ctx.lineWidth = 2;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            const dataurl = localStorage.getItem("firma");
+            if (dataurl != null) {
+                const img = new Image();
+                img.onload = function () {
+                    // FIX: Pass rect.width and rect.height to constraint proportions into the layout area
+                    ctx.drawImage(img, 0, 0, rect.width, rect.height);
+                };
+                img.src = dataurl;
+            }
+        }
+
+        // Get position relative to canvas wrapper element
+        function getCoords(e) {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return {
+                x: clientX - rect.left,
+                y: clientY - rect.top
+            };
+        }
+
+        // Draw Event Logic
+        function start(e) {
+            isDrawing = true;
+            const coords = getCoords(e);
+            ctx.beginPath();
+            ctx.moveTo(coords.x, coords.y);
+            if (e.cancelable) e.preventDefault();
+        }
+
+        function move(e) {
+            if (!isDrawing) return;
+            const coords = getCoords(e);
+            ctx.lineTo(coords.x, coords.y);
+            ctx.stroke();
+            if (e.cancelable) e.preventDefault();
+        }
+
+        function stop() {
+            if (isDrawing) {
+                isDrawing = false;
+                ctx.closePath();
+            }
+        }
+
+        // Desktop Mouse Events
+        canvas.addEventListener('mousedown', start);
+        canvas.addEventListener('mousemove', move);
+        window.addEventListener('mouseup', stop);
+
+        // Mobile/Tablet Touch Events
+        canvas.addEventListener('touchstart', start, { passive: false });
+        canvas.addEventListener('touchmove', move, { passive: false });
+        canvas.addEventListener('touchend', stop);
+
+        // Control Buttons
+        /*      clearBtn.addEventListener('click', () => {
+                  ctx.clearRect(0, 0, canvas.width, canvas.height);
+                  localStorage.removeItem("firma"); // Optional: clear storage too
+              });
+      
+              saveBtn.addEventListener('click', () => {
+                  // Exports signature as a standard PNG base64 string
+                  const dataURL = canvas.toDataURL('image/png');
+                  console.log('Your Signature Data URL:', dataURL);
+                  localStorage.setItem("firma", dataURL);
+                  alert('Signature Saved! (Check your developer console to see the exported image string)');
+              });
+              */
+
+        // Run setup on load and whenever window resizes
+        setupCanvas();
+        window.addEventListener('resize', setupCanvas);
+
+    }
+
+    function sendc() {
+
+        GetJson(link, function (ob) {
+
+            if (JSON.stringify(ob) === sobj) {
+                var o = {};
+                o.fe = fe.value;
+                o.no = no.value;
+                o.te = te.value;
+                o.pr = pr.value;
+                o.di = di.value;
+                o.ho = ho.value;
+                o.hi = hi.value;
+                o.de = de.value;
+                o.not = not.value;
+                o.fi = firc.toDataURL('image/png');
+                o.fg = firg.toDataURL('image/png');
+
+            }
+
+            var sc = codif(JSON.stringify(o));
+
+            actualob[1] = sc;
+            UpdateJson(link, obj, function () { alert("All Done...") })
+
+        })
+
+    }
+
+    function verifycl(cl) {
+        //   alert(JSON.stringify(obc.cls))
+        var cls = obj.cls;
+        for (var i = 0; i < cls.length; i++) {
+            //   alert(cls[i][0])
+            c = cls[i][0];
+            if (c === cl) return { ob: cls[i], index: i };// return true
+
+        }
+        return false;
+    }
+
+
+
+</script>
+
+
+</html>
