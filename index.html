@@ -57,7 +57,8 @@
 <script>
 
     link = "https://api.jsonblob.com/01a0e08d-3c62-7f19-b76d-f8e8fd28c363";// "https://api.jsonblob/01a0e08d-3c62-7f19-b76d-f8e8fd28c363/json"
-    var GetJson, UpdateJson, obj, sobj, actualob, obfe, acc = true;
+    var GetJson, UpdateJson, obj, sobj, obfe, acc = true;
+    actualob={}
     loadDoc('https://raw.githubusercontent.com/ljaureguil/My-Library/refs/heads/master/MyLibmin.js', function (r) {
 
         var sc = document.createElement("script");
@@ -213,13 +214,13 @@ Firma del cliente:
                 firg.disabled = true;
                 to.disabled = true;
 
-             //   alert(obfe.acc)
+                //   alert(obfe.acc)
                 if (!obfe.acc) {
                     firc.disabled = false;
                     clrfs.disabled = false;
                     dateCliente.disabled = false;
                     dateGrupo.disabled = false;
-                //    alert("Access not granted")
+                    //    alert("Access not granted")
 
                 }
 
@@ -311,7 +312,7 @@ Firma del cliente:
 
         firc.arf = obfe.fic;
         firg.arf = obfe.fgc;
- //       alert(JSON.stringify(obfe.fic))
+        //       alert(JSON.stringify(obfe.fic))
         drawPath(firc);
         drawPath(firg);
 
@@ -324,6 +325,7 @@ Firma del cliente:
 
     }
     function drawPath2(canvas) {
+        if (canvas.arf === undefined || canvas.arf === null || canvas.arf === "") return;
         const ctx = canvas.getContext('2d');
         ctx.beginPath();
         var a = canvas.arf;
@@ -341,6 +343,7 @@ Firma del cliente:
     }
 
     function drawPath(canvas) {
+        if (canvas.arf === undefined || canvas.arf === null || canvas.arf === "") return;
         const ctx = canvas.getContext('2d');
         ctx.beginPath();
         var a = canvas.arf;
@@ -403,16 +406,19 @@ Firma del cliente:
             ctx.lineWidth = 2;
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
-/*
-            const dataurl = localStorage.getItem("firma");
-            if (dataurl != null) {
-                const img = new Image();
-                img.onload = function () {
-                    // FIX: Pass rect.width and rect.height to constraint proportions into the layout area
-                    ctx.drawImage(img, 0, 0, rect.width, rect.height);
-                };
-                img.src = dataurl;
-            }*/
+
+            /*
+                        const dataurl = localStorage.getItem("firma");
+                        if (dataurl != null) {
+                            const img = new Image();
+                            img.onload = function () {
+                                // FIX: Pass rect.width and rect.height to constraint proportions into the layout area
+                                ctx.drawImage(img, 0, 0, rect.width, rect.height);
+                            };
+                            img.src = dataurl;
+                        }*/
+            drawPath(canvas)
+
         }
 
         // Get position relative to canvas wrapper element
@@ -509,9 +515,6 @@ Firma del cliente:
             o.not = not.value;
             o.dfc = dateCliente.value;
             o.dfg = dateGrupo.value;
-            //    o.fi = firc.toDataURL('image/png');
-            //    o.fg = firg.toDataURL('image/png');
-     //       alert("   fff   " + firc.arf)
             if (firc.arf === undefined) firc.arf = "";
             if (firg.arf === undefined) firg.arf = "";
             o.fic = firc.arf;
@@ -520,9 +523,15 @@ Firma del cliente:
             //  }
 
             var sc = codif(JSON.stringify(o));
-            //  var accualob=verifycl(s)
-       //     actualob[1] = sc; alert(actualob); alert(o.fic)
-            UpdateJson(link, obj, function () { alert("All Done...") })
+             actualob[1] = sc;
+            var v = verifycl(actualob[0]);
+            if (!v) { ob.cls.push(actualob) }
+            else ob.cls[v.index] = actualob
+            //     alert("Verification result: " + JSON.stringify(v));
+            //  alert(JSON.p\p89989.9889.-9.stringify(actualob));
+            UpdateJson(link, ob, function () { alert("All Done...") })
+
+     //       UpdateJson(link, obj, function () { alert("All Done...") })
 
         })
 
