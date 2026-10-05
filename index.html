@@ -35,7 +35,7 @@
 
 <div id="controles">
     <button onclick="printPdf()">Print/Pdf</button>
-    <button onclick="clearFs()">Clear Firmas</button>
+    <button id="clrfs" onclick="clearFs()">Clear Firma</button>
     <button onclick="sendc()">Enviar</button>
     <select id="selopc" oninput="doopcs(this.value)">
         <option>Select an option</option>
@@ -55,8 +55,9 @@
 
 
 <script>
+
     link = "https://api.jsonblob.com/01a0e08d-3c62-7f19-b76d-f8e8fd28c363";// "https://api.jsonblob/01a0e08d-3c62-7f19-b76d-f8e8fd28c363/json"
-    var GetJson, UpdateJson, obj, sobj, actualob, obfe
+    var GetJson, UpdateJson, obj, sobj, actualob, obfe, acc = true;
     loadDoc('https://raw.githubusercontent.com/ljaureguil/My-Library/refs/heads/master/MyLibmin.js', function (r) {
 
         var sc = document.createElement("script");
@@ -147,6 +148,15 @@ Firma del cliente:
                     re.disabled = true;
                     to.disabled = true;
                     fe.disabled = true;
+                    pr.disabled = true;
+                    alert(obfe.acc)
+                    if (!obfe.acc) {
+                        firc.disabled = false;
+                        clrfs.disabled = false;
+                        dateCliente.disabled = false;
+                        dateGrupo.disabled = false;
+
+                    }
 
                     i = cls.length
 
@@ -179,14 +189,14 @@ Firma del cliente:
             obj = ob;
             sobj = JSON.stringify(ob)
 
-            var ot = verifycl(s);
+            var ot = verifycl(s);// alert(ot)
             if (ot.ob) {
 
                 final.style.display = "block";
                 actualob = ot.ob;
 
                 if (actualob[1] === "") {
-                    obfe = { fe: "", no: "", te: "", pr: "", di: "", ho: "", hi: "", de: "", "not": "" };
+                    obfe = { fe: "", no: "", te: "", pr: "", di: "", ho: "", hi: "", de: "", "not": "", fi: "", fg: "" };
 
                 }
                 else {
@@ -194,13 +204,26 @@ Firma del cliente:
                     //    alert(sc+"antes de parsear")
                     obfe = JSON.parse(sc);
                 }
-                getPriv();
+
+                getPriv(); //alert("ok")
                 fe.disabled = true;
                 ht.disabled = true;
                 de.disabled = true;
                 re.disabled = true;
                 firg.disabled = true;
                 to.disabled = true;
+
+             //   alert(obfe.acc)
+                if (!obfe.acc) {
+                    firc.disabled = false;
+                    clrfs.disabled = false;
+                    dateCliente.disabled = false;
+                    dateGrupo.disabled = false;
+                //    alert("Access not granted")
+
+                }
+
+
 
             }
             else {
@@ -242,67 +265,103 @@ Firma del cliente:
     var cwidth = 550;
 
     function getPriv() {
-        loadDoc("https://raw.githubusercontent.com/ljaureguil/Print/refs/heads/main/cpriv", function (r) {
-            //   editor.value = r
-            // var tx = r.split(`Firma del cliente:`)[0]
 
-            //  tx = tx.replace(/\n/g, "<br>");
-            var tx = contPriv.replace(/\n/g, "<br>");
-            //      tx.replace(//g,"")
+        var tx = contPriv.replace(/\n/g, "<br>");
 
 
-            final.innerHTML = '<title>Contrato Comando Unico</title><p style="width:100%;height:100%;border:none;padding:0px;font-size:14px">' + tx //height:auto;
+        final.innerHTML = '<title>Contrato Comando Unico</title><p style="width:100%;height:100%;border:none;padding:0px;font-size:14px">' + tx //height:auto;
 
-                + ' Firma del Cliente: <canvas id="firc" style=";width:40%;height:50px;border-bottom: 2px solid #000000;background:rgba(0,0,0,.02);"></canvas> . . . Date: <input type="date"><br> <br>'
-                + ' <br>Firma del Grupo: <canvas id="firg" style="width:40%;height:50px;border-bottom: 2px solid #000000;background:rgba(0,0,0,.02);"></canvas> . . . Date: <input type="date"><br> <br><br>'
-                // eval(scc)
-                + '</p>'
-            ////////////////////////////////////
-            var o = {};
-            fe.value = obfe.fe;
-            no.value = obfe.no;
-            te.value = obfe.te;
-            pr.value = obfe.pr;
-            di.value = obfe.di;
-            ho.value = obfe.ho;
-            hi.value = obfe.hi;
-            de.value = obfe.de;
-            not.value = obfe.not;
-            //  o.fi = firc.toDataURL('image/png');
-            var dataurl = obfe.fi;
-            const img = new Image();
-            img.onload = function () {
-                // FIX: Pass rect.width and rect.height to constraint proportions into the layout area
-                firc.getContext("2d").drawImage(img, 0, 0, firc.width, firc.height);
-            };
-            img.src = dataurl;
-            /*     */
-            var dataurl = obfe.fg;
-            const img2 = new Image();
-            img2.onload = function () {
-                // FIX: Pass rect.width and rect.height to constraint proportions into the layout area
-                firg.getContext("2d").drawImage(img2, 0, 0, firg.width, firg.height);
-                firg.disabled = true;
-            };
-            img2.src = dataurl;
-
-
-            ////////////////////////////////////
-
-
-
-            setgr(firc);
-            // setgr(firg)
-
-            //  childWindow.print();
+            + ' Firma del Cliente: <canvas id="firc" style=";width:40%;height:50px;border-bottom: 2px solid #000000;background:rgba(0,0,0,.02);"></canvas> . . . Date: <input id="dateCliente" type="date"><br> <br>'
+            + ' <br>Firma del Grupo: <canvas id="firg" style="width:40%;height:50px;border-bottom: 2px solid #000000;background:rgba(0,0,0,.02);"></canvas> . . . Date: <input id="dateGrupo" type="date"><br> <br><br>'
+            // eval(scc)
+            + '</p>';
+        ////////////////////////////////////
+        var o = {};
+        fe.value = obfe.fe;
+        no.value = obfe.no;
+        te.value = obfe.te;
+        pr.value = obfe.pr;
+        di.value = obfe.di;
+        ho.value = obfe.ho;
+        hi.value = obfe.hi;
+        de.value = obfe.de;
+        not.value = obfe.not;
+        dateCliente.value = obfe.dfc;
+        dateGrupo.value = obfe.dfg;
+        //  o.fi = firc.toDataURL('image/png');
+        var dataurl = obfe.fi;
+        const img = new Image();
+        img.onload = function () {
+            // FIX: Pass rect.width and rect.height to constraint proportions into the layout area
+            firc.getContext("2d").drawImage(img, 0, 0, firc.width, firc.height);
+        };
+        //       img.src = dataurl;
+        /*     */
+        var dataurl = obfe.fg;
+        const img2 = new Image();
+        img2.onload = function () {
+            // FIX: Pass rect.width and rect.height to constraint proportions into the layout area
+            firg.getContext("2d").drawImage(img2, 0, 0, firg.width, firg.height);
             firg.disabled = true;
+        };
+        //    img2.src = dataurl;
+
+        setgr(firc);
+        setgr(firg);
+
+        firc.arf = obfe.fic;
+        firg.arf = obfe.fgc;
+ //       alert(JSON.stringify(obfe.fic))
+        drawPath(firc);
+        drawPath(firg);
+
+        firg.disabled = true;
 
 
 
-        });
+        //      });
 
 
     }
+    function drawPath2(canvas) {
+        const ctx = canvas.getContext('2d');
+        ctx.beginPath();
+        var a = canvas.arf;
+
+
+        for (let i = 0; i < a.length; i += 2) {
+            const point = a[i];
+            if (i === 0) {
+                ctx.moveTo(a.charCodeAt(i), a.charCodeAt(i + 1));
+            } else {
+                ctx.lineTo(a.charCodeAt(i), a.charCodeAt(i + 1));
+            }
+        }
+        ctx.stroke();
+    }
+
+    function drawPath(canvas) {
+        const ctx = canvas.getContext('2d');
+        ctx.beginPath();
+        var a = canvas.arf;
+
+        var ars = canvas.arf.split("marcador");
+
+        for (var v = 0; v < ars.length; v++) {
+            a = ars[v];
+            for (let i = 0; i < a.length; i += 2) {
+                const point = a[i];
+                if (i === 0) {
+                    ctx.moveTo(a.charCodeAt(i), a.charCodeAt(i + 1));
+                } else {
+                    ctx.lineTo(a.charCodeAt(i), a.charCodeAt(i + 1));
+                }
+            }
+            ctx.stroke();
+        }
+    }
+
+
     function printDoc() {
         controles.style.display = "none"
         window.print();
@@ -316,8 +375,8 @@ Firma del cliente:
         var ctx = firc.getContext('2d');
         ctx.clearRect(0, 0, firc.width, firc.height);
 
-        ctx = firg.getContext('2d');
-        ctx.clearRect(0, 0, firg.width, firg.height);
+        //  ctx = firg.getContext('2d');
+        // ctx.clearRect(0, 0, firg.width, firg.height);
     }
 
     function setgr(canvas) {
@@ -344,7 +403,7 @@ Firma del cliente:
             ctx.lineWidth = 2;
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
-
+/*
             const dataurl = localStorage.getItem("firma");
             if (dataurl != null) {
                 const img = new Image();
@@ -353,7 +412,7 @@ Firma del cliente:
                     ctx.drawImage(img, 0, 0, rect.width, rect.height);
                 };
                 img.src = dataurl;
-            }
+            }*/
         }
 
         // Get position relative to canvas wrapper element
@@ -373,6 +432,11 @@ Firma del cliente:
             const coords = getCoords(e);
             ctx.beginPath();
             ctx.moveTo(coords.x, coords.y);
+            //aqui 
+            if (canvas.arf !== "") canvas.arf += "marcador";
+
+            canvas.arf += String.fromCharCode(coords.x);
+            canvas.arf += String.fromCharCode(coords.y);
             if (e.cancelable) e.preventDefault();
         }
 
@@ -380,6 +444,10 @@ Firma del cliente:
             if (!isDrawing) return;
             const coords = getCoords(e);
             ctx.lineTo(coords.x, coords.y);
+
+            canvas.arf += String.fromCharCode(coords.x);
+            canvas.arf += String.fromCharCode(coords.y);
+
             ctx.stroke();
             if (e.cancelable) e.preventDefault();
         }
@@ -392,14 +460,16 @@ Firma del cliente:
         }
 
         // Desktop Mouse Events
-        canvas.addEventListener('mousedown', start);
-        canvas.addEventListener('mousemove', move);
-        window.addEventListener('mouseup', stop);
+        if (obfe.acc && canvas.id === "firc") {
+            canvas.addEventListener('mousedown', start);
+            canvas.addEventListener('mousemove', move);
+            window.addEventListener('mouseup', stop);
 
-        // Mobile/Tablet Touch Events
-        canvas.addEventListener('touchstart', start, { passive: false });
-        canvas.addEventListener('touchmove', move, { passive: false });
-        canvas.addEventListener('touchend', stop);
+            // Mobile/Tablet Touch Events
+            canvas.addEventListener('touchstart', start, { passive: false });
+            canvas.addEventListener('touchmove', move, { passive: false });
+            canvas.addEventListener('touchend', stop);
+        }
 
         // Control Buttons
         /*      clearBtn.addEventListener('click', () => {
@@ -426,25 +496,32 @@ Firma del cliente:
 
         GetJson(link, function (ob) {
 
-            if (JSON.stringify(ob) === sobj) {
-                var o = {};
-                o.fe = fe.value;
-                o.no = no.value;
-                o.te = te.value;
-                o.pr = pr.value;
-                o.di = di.value;
-                o.ho = ho.value;
-                o.hi = hi.value;
-                o.de = de.value;
-                o.not = not.value;
-                o.fi = firc.toDataURL('image/png');
-                o.fg = firg.toDataURL('image/png');
+            //  if (JSON.stringify(ob) === sobj) {
+            var o = {};
+            o.fe = fe.value;
+            o.no = no.value;
+            o.te = te.value;
+            o.pr = pr.value;
+            o.di = di.value;
+            o.ho = ho.value;
+            o.hi = hi.value;
+            o.de = de.value;
+            o.not = not.value;
+            o.dfc = dateCliente.value;
+            o.dfg = dateGrupo.value;
+            //    o.fi = firc.toDataURL('image/png');
+            //    o.fg = firg.toDataURL('image/png');
+     //       alert("   fff   " + firc.arf)
+            if (firc.arf === undefined) firc.arf = "";
+            if (firg.arf === undefined) firg.arf = "";
+            o.fic = firc.arf;
+            o.fgc = firg.arf;
 
-            }
+            //  }
 
             var sc = codif(JSON.stringify(o));
-
-            actualob[1] = sc;
+            //  var accualob=verifycl(s)
+       //     actualob[1] = sc; alert(actualob); alert(o.fic)
             UpdateJson(link, obj, function () { alert("All Done...") })
 
         })
@@ -454,6 +531,7 @@ Firma del cliente:
     function verifycl(cl) {
         //   alert(JSON.stringify(obc.cls))
         var cls = obj.cls;
+        // alert(typeof cls)
         for (var i = 0; i < cls.length; i++) {
             //   alert(cls[i][0])
             c = cls[i][0];
