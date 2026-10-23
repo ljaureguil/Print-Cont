@@ -7,10 +7,13 @@
 <style>
     body {
         background-color: white;
+
     }
 
     button {
         margin: 15px;
+        border-radius: 100px;
+        background-color: rgba(68, 131, 212, 0.4);
 
     }
 
@@ -57,8 +60,7 @@
 <script>
 
     link = "https://api.jsonblob.com/01a0e08d-3c62-7f19-b76d-f8e8fd28c363";// "https://api.jsonblob/01a0e08d-3c62-7f19-b76d-f8e8fd28c363/json"
-    var GetJson, UpdateJson, obj, sobj, obfe, acc = true;
-    actualob={}
+    var GetJson, UpdateJson, obj, sobj, actualob, obfe, acc = true;
     loadDoc('https://raw.githubusercontent.com/ljaureguil/My-Library/refs/heads/master/MyLibmin.js', function (r) {
 
         var sc = document.createElement("script");
@@ -107,8 +109,7 @@ En dado caso de un clima imprevisto, ya sea lluvia, granizo, etc. El evento tend
 Debe tomarse en cuenta que si por alguna razón la energía eléctrica no es suficiente o llegara a haber un corto o fallas; el evento tendría que llevarse a cabo aun sin energía. se tendrá que notificar al responsable del grupo con un mínimo de 15 días antes. El lugar del evento debe disponer con la suficiente energía para la conexión de aparatos auditivos, como bocinas, micrófonos, etc.
 
 Grupo Comando Único se compromete con todos sus clientes a ofrecer el mejor servicio que se merece, para que pase un momento agradable en su celebración.
-
-Firma del cliente: 
+ 
 `
 
     var contPriv = p1 + p2 + p3;
@@ -150,7 +151,7 @@ Firma del cliente:
                     to.disabled = true;
                     fe.disabled = true;
                     pr.disabled = true;
-                    alert(obfe.acc)
+                    //      alert(obfe.acc)
                     if (!obfe.acc) {
                         firc.disabled = false;
                         clrfs.disabled = false;
@@ -220,7 +221,7 @@ Firma del cliente:
                     clrfs.disabled = false;
                     dateCliente.disabled = false;
                     dateGrupo.disabled = false;
-                    //    alert("Access not granted")
+                    //  alert("Access not granted")
 
                 }
 
@@ -272,12 +273,13 @@ Firma del cliente:
 
         final.innerHTML = '<title>Contrato Comando Unico</title><p style="width:100%;height:100%;border:none;padding:0px;font-size:14px">' + tx //height:auto;
 
-            + ' Firma del Cliente: <canvas id="firc" style=";width:40%;height:50px;border-bottom: 2px solid #000000;background:rgba(0,0,0,.02);"></canvas> . . . Date: <input id="dateCliente" type="date"><br> <br>'
-            + ' <br>Firma del Grupo: <canvas id="firg" style="width:40%;height:50px;border-bottom: 2px solid #000000;background:rgba(0,0,0,.02);"></canvas> . . . Date: <input id="dateGrupo" type="date"><br> <br><br>'
+            + ' Firma del Cliente: . . .  Date: <input id="dateCliente" type="date"><br><br> <canvas id="firc" style=";width:100%;height:50px;border-bottom: 2px solid #000000;background:rgba(0,0,0,.02);"></canvas> <br>'
+            + ' <br>Firma del Grupo: . . .  Date: <input id="dateGrupo" type="date"><br><canvas id="firg" style="width:100%;height:50px;border-bottom: 2px solid #000000;background:rgba(0,0,0,.02);"></canvas> <br><br>'
             // eval(scc)
             + '</p>';
         ////////////////////////////////////
         var o = {};
+        //  alert(obfe.te)
         fe.value = obfe.fe;
         no.value = obfe.no;
         te.value = obfe.te;
@@ -312,7 +314,7 @@ Firma del cliente:
 
         firc.arf = obfe.fic;
         firg.arf = obfe.fgc;
-        //       alert(JSON.stringify(obfe.fic))
+        //   alert(JSON.stringify(obfe.fic))
         drawPath(firc);
         drawPath(firg);
 
@@ -325,7 +327,6 @@ Firma del cliente:
 
     }
     function drawPath2(canvas) {
-        if (canvas.arf === undefined || canvas.arf === null || canvas.arf === "") return;
         const ctx = canvas.getContext('2d');
         ctx.beginPath();
         var a = canvas.arf;
@@ -343,7 +344,6 @@ Firma del cliente:
     }
 
     function drawPath(canvas) {
-        if (canvas.arf === undefined || canvas.arf === null || canvas.arf === "") return;
         const ctx = canvas.getContext('2d');
         ctx.beginPath();
         var a = canvas.arf;
@@ -407,18 +407,15 @@ Firma del cliente:
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
 
-            /*
-                        const dataurl = localStorage.getItem("firma");
-                        if (dataurl != null) {
-                            const img = new Image();
-                            img.onload = function () {
-                                // FIX: Pass rect.width and rect.height to constraint proportions into the layout area
-                                ctx.drawImage(img, 0, 0, rect.width, rect.height);
-                            };
-                            img.src = dataurl;
-                        }*/
-            drawPath(canvas)
-
+            const dataurl = localStorage.getItem("firma");
+            if (dataurl != null) {
+                const img = new Image();
+                img.onload = function () {
+                    // FIX: Pass rect.width and rect.height to constraint proportions into the layout area
+                    ctx.drawImage(img, 0, 0, rect.width, rect.height);
+                };
+                img.src = dataurl;
+            }
         }
 
         // Get position relative to canvas wrapper element
@@ -515,6 +512,9 @@ Firma del cliente:
             o.not = not.value;
             o.dfc = dateCliente.value;
             o.dfg = dateGrupo.value;
+            //    o.fi = firc.toDataURL('image/png');
+            //    o.fg = firg.toDataURL('image/png');
+            //      alert("   fff   " + firc.arf)
             if (firc.arf === undefined) firc.arf = "";
             if (firg.arf === undefined) firg.arf = "";
             o.fic = firc.arf;
@@ -523,15 +523,9 @@ Firma del cliente:
             //  }
 
             var sc = codif(JSON.stringify(o));
-             actualob[1] = sc;
-            var v = verifycl(actualob[0]);
-            if (!v) { ob.cls.push(actualob) }
-            else ob.cls[v.index] = actualob
-            //     alert("Verification result: " + JSON.stringify(v));
-            //  alert(JSON.p\p89989.9889.-9.stringify(actualob));
-            UpdateJson(link, ob, function () { alert("All Done...") })
-
-     //       UpdateJson(link, obj, function () { alert("All Done...") })
+            //  var accualob=verifycl(s)
+            actualob[1] = sc;// alert(actualob); //alert(o.fic)
+            UpdateJson(link, obj, function () { alert("All Done...") })
 
         })
 
@@ -556,3 +550,10 @@ Firma del cliente:
 
 
 </html>
+<script>
+
+
+
+
+
+</script>
