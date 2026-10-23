@@ -22,6 +22,7 @@
         border-top: none;
         border-left: none;
         border-right: none;
+        padding: 5px;
 
         field-sizing: content;
         min-width: 150px;
@@ -81,14 +82,13 @@ Por medio de este presente hago constar que el Grupo Comando Único amenizara en
     var p2 = `
 Fecha del Evento:<input id="fe" type="date"  class="cinputs"></input>
 Nombre: <input id="no" class="cinputs"></input>
-
-Precio por Hora<input id="pr" type="number"  class="cinputs"></input>
-Horas:<input id="ho" type="number"  class="cinputs" ></input>
+Precio por Hora<input id="pr" type="number" oni class="cinputs"></input>
+Horas:<input id="ho" type="number" oninput="to.value=pr.value*ho.value;if(de.value) re.value=to.value-de.value;if(hi.value) ht.value=hi.value+ho.value" class="cinputs" ></input>
 Hora de Inicio:<input id="hi" type="number"  class="cinputs" oninput="ht.value=this.value*1+ho.value*1"></input>
 Hora de Término:<input id="ht" type="number"  class="cinputs"></input>
 Domicilio del evento:<input id="di" type="text"  class="cinputs"></input>
 Numero tel/cell:<input id="te" type="tel"  class="cinputs"></input>
-Deposito:<input id="de" type="number"  class="cinputs" oninput=""></input>
+Deposito:<input id="de" type="number"  class="cinputs" oninput="re.value=to.value-de.value"></input>
 Restando:<input id="re" type="number"  class="cinputs"></input>
 Total:<input id="to" type="number"  class="cinputs"></input>
 Nota:<input id="not" type="text"  class="cinputs"></input>
@@ -145,12 +145,19 @@ Grupo Comando Único se compromete con todos sus clientes a ofrecer el mejor ser
                     obfe = JSON.parse(sc);
 
                     getPriv();
-                    //    ht.disabled = true;
+                    ht.value = ho.value + hi.value;
+                    to.value = ho.value * pr.value;
+                    re.value = to.value - de.value;
+                    alert(re.value)
+                    ht.disabled = true;
                     de.disabled = true;
-                    //   re.disabled = true;
-                    //    to.disabled = true;
+                    re.disabled = true;
+                    to.disabled = true;
                     fe.disabled = true;
                     pr.disabled = true;
+
+
+
                     //      alert(obfe.acc)
                     if (!obfe.acc) {
                         firc.disabled = false;
@@ -207,13 +214,17 @@ Grupo Comando Único se compromete con todos sus clientes a ofrecer el mejor ser
                     obfe = JSON.parse(sc);
                 }
 
-                getPriv(); //alert("ok")
+                getPriv();
+                ht.value = ho.value + hi.value;
+                to.value = ho.value * pr.value;
+                re.value = to.value - de.value;
+   
                 fe.disabled = true;
-                //     ht.disabled = true;
+                ht.disabled = true;
                 de.disabled = true;
-                //  re.disabled = true;
+                re.disabled = true;
                 firg.disabled = true;
-                //   to.disabled = true;
+                to.disabled = true;
 
                 //   alert(obfe.acc)
                 if (!obfe.acc) {
