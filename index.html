@@ -14,6 +14,7 @@
         margin: 15px;
         border-radius: 100px;
         background-color: rgba(68, 131, 212, 0.4);
+        box-shadow: -3px 4px 18px rgba(0, 0, 0, 0.3);
 
     }
 
@@ -23,6 +24,8 @@
         border-left: none;
         border-right: none;
         padding: 5px;
+        font-size: bold;
+        color: rgb(0, 156, 218);
 
         field-sizing: content;
         min-width: 150px;
@@ -40,14 +43,10 @@
 <div id="controles">
     <button onclick="printPdf()">Print/Pdf</button>
     <button id="clrfs" onclick="clearFs()">Clear Firma</button>
-    <button onclick="sendc()">Enviar</button>
-    <select id="selopc" oninput="doopcs(this.value)">
-        <option>Select an option</option>
-        <option>Obtener my contrato</option>
-        <option>Enviar Contrato</option>
-        <option>Clear Contenido</option>
-        <option>guardar contrato</option>
-    </select>
+        <button onclick="inic()">Obtener Contrato</button> 
+ 
+    <button onclick="sendc()" style="background-color: rgb(177, 27, 11);color: white;">Enviar</button>
+  
 
 </div>
 
@@ -218,7 +217,7 @@ Grupo Comando Único se compromete con todos sus clientes a ofrecer el mejor ser
                 ht.value = ho.value + hi.value;
                 to.value = ho.value * pr.value;
                 re.value = to.value - de.value;
-   
+
                 fe.disabled = true;
                 ht.disabled = true;
                 de.disabled = true;
@@ -355,6 +354,7 @@ Grupo Comando Único se compromete con todos sus clientes a ofrecer el mejor ser
     }
 
     function drawPath(canvas) {
+        if (canvas.arf === undefined) return;
         const ctx = canvas.getContext('2d');
         ctx.beginPath();
         var a = canvas.arf;
@@ -417,16 +417,9 @@ Grupo Comando Único se compromete con todos sus clientes a ofrecer el mejor ser
             ctx.lineWidth = 2;
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
+            drawPath(firc);
+            drawPath(firg);
 
-            const dataurl = localStorage.getItem("firma");
-            if (dataurl != null) {
-                const img = new Image();
-                img.onload = function () {
-                    // FIX: Pass rect.width and rect.height to constraint proportions into the layout area
-                    ctx.drawImage(img, 0, 0, rect.width, rect.height);
-                };
-                img.src = dataurl;
-            }
         }
 
         // Get position relative to canvas wrapper element
@@ -502,7 +495,7 @@ Grupo Comando Único se compromete con todos sus clientes a ofrecer el mejor ser
 
         // Run setup on load and whenever window resizes
         setupCanvas();
-        window.addEventListener('resize', setupCanvas);
+        window.addEventListener('resize', setupCanvas);//
 
     }
 
